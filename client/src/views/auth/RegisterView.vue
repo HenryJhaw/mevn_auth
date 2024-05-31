@@ -57,6 +57,7 @@ const errorMessage = ref<string>("")
 
 async function submit(){
   await authStore.register(registerData)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .then(res => {
       router.replace({name: "login"})
     })

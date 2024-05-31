@@ -21,28 +21,27 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '../../stores/auth';
-import { computed, onMounted } from 'vue';
+import { useAuthStore } from '../../stores/auth'
+import { computed, onMounted } from 'vue'
 
 const authStore = useAuthStore()
 
-const user = computed(()=>{
+const user = computed(() => {
   console.log(authStore.userDetail)
   return authStore.userDetail
 })
 
-async function getUser(){
+async function getUser() {
   await authStore.getUser()
 }
 
-onMounted(async ()=>{
+onMounted(async () => {
   await getUser()
 })
-
 </script>
 
 <style scoped>
-#user .card{
+#user .card {
   max-width: 40vw;
   margin: auto;
 }

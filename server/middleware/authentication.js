@@ -1,32 +1,35 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const jwt = require('jsonwebtoken')
+const User = require('../models/User')
 
-async function authentication(req, res, next) {
-    const authHeader = req.headers.authorization || req.headers.Authorization;
+function authentication(req, res, next) {
+  const authHeader = req.headers.authorization || req.headers.Authorization
 
-    if (authHeader?.startsWith('Bearer')) {
-        const token = authHeader.split(' ')[1];
+  if(authHeader?.startsWith('Bearer')) {
 
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
-            if (err) {
-                req.user = {};
-                return next();
-            }
+    const token = authHeader.split(' ')[1]
 
-            const user = await User.findById(decoded.id).select('-password -refresh_token').exec();
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
+      if(err){
+        req.user = {}
+        return next()
+      }
 
-            if (user) {
-                req.user = user.toObject({ getters: true });
-            } else {
-                req.user = {};
-            }
+      const user = await User.findById(decoded.id).select({ password: 0, refresh_token: 0 }).exec()
 
-            return next();
-        });
-    } else {
-        req.user = {};
-        return next();
-    }
+      if(user){
+        req.user = user.toObject({ getters: true })
+      }else{
+        req.user = {}
+      }
+
+      return next()
+
+    })
+
+  }else{
+    req.user = {}
+    return next()
+  }
 }
 
-module.exports = authentication;
+module.exports = authentication

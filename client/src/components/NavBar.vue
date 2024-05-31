@@ -56,6 +56,7 @@ const isAuthenticated = computed(()=>{
 
 async function logout(){
   await authStore.logout()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .then( res => {
       router.replace({name: 'home'})
     })
